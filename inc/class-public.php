@@ -52,32 +52,35 @@ class Crypto_Currency_Faucets_Public {
 	public function shortcode( $attr ) {
 		$faucets    = $this->get_faucets();
 		$currencies = $this->get_currencies( $faucets );
-
-		if ( count( $currencies ) > 1 ) {
-			$current = $this->shortcode_tabs( $currencies );
-			$currencies = $current ? $currencies = [ $current => $currencies[ $current ] ] : $currencies;
-		}
 		?>
-		<table id="crypto-currency-faucets">
-			<tr>
-				<th>Faucet name</th>
-				<th>Currency</th>
-				<th>Reward</th>
-				<th>Visit</th>
-			</tr>
-			<?php foreach ( $faucets as $f ) {
-				if ( isset( $currencies[ $f->currency ] ) ) {
-					?>
-					<tr>
-						<td class="cc-faucet-name"><?php echo $f->name ?></td>
-						<td class="cc-faucet-currency"><?php echo $f->currency ?></td>
-						<td class="cc-faucet-reward"><?php echo $f->reward ?></td>
-						<td class="cc-faucet-url"><a href="<?php echo $f->url ?>">Visit</a></td>
-					</tr>
-					<?php
-				}
-			} ?>
-		</table>
+		<div id="crypto-currency-faucets">
+			<?php
+			if ( count( $currencies ) > 1 ) {
+				$current    = $this->shortcode_tabs( $currencies ); // Output tabs as well
+				$currencies = $current ? $currencies = [ $current => $currencies[ $current ] ] : $currencies;
+			}
+			?>
+			<table id="crypto-currency-faucets-table">
+				<tr>
+					<th>Faucet name</th>
+					<th>Currency</th>
+					<th>Reward</th>
+					<th>Visit</th>
+				</tr>
+				<?php foreach ( $faucets as $f ) {
+					if ( isset( $currencies[ $f->currency ] ) ) {
+						?>
+						<tr>
+							<td class="cc-faucet-name"><?php echo $f->name ?></td>
+							<td class="cc-faucet-currency"><?php echo $f->currency ?></td>
+							<td class="cc-faucet-reward"><?php echo $f->reward ?></td>
+							<td class="cc-faucet-url"><a href="<?php echo $f->url ?>">Visit</a></td>
+						</tr>
+						<?php
+					}
+				} ?>
+			</table>
+		</div>
 		<?php
 	}
 
@@ -112,7 +115,7 @@ class Crypto_Currency_Faucets_Public {
 		$currencies = [];
 
 		foreach ( $faucets as $f ) {
-			$currencies[ $f->currency ] = empty( $currencies[ $f->currency ] ) ? 1 : ++$currencies[ $f->currency ];
+			$currencies[ $f->currency ] = empty( $currencies[ $f->currency ] ) ? 1 : ++ $currencies[ $f->currency ];
 		}
 
 		return $currencies;
@@ -120,7 +123,9 @@ class Crypto_Currency_Faucets_Public {
 
 	/**
 	 * Shows all currency tabs
+	 *
 	 * @param array $currencies All currencies to show
+	 *
 	 * @return string Current currency
 	 */
 	protected function shortcode_tabs( $currencies ) {
@@ -132,10 +137,10 @@ class Crypto_Currency_Faucets_Public {
 			<?php
 			foreach ( $currencies as $currency => $num_f ) {
 				$url = '?faucets-currency=' . urlencode( $currency );
-					?>
-					<a href="<?php echo $url ?>" class="cc-faucets-tab <?php echo $currency === $current ? 'current' : '' ?>">
-						<?php echo $currency ?></a>
-					<?php
+				?>
+				<a href="<?php echo $url ?>" class="cc-faucets-tab <?php echo $currency === $current ? 'current' : '' ?>">
+					<?php echo $currency ?></a>
+				<?php
 			}
 			?>
 		</div>
