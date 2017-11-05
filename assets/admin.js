@@ -5,7 +5,16 @@
  * @version 1.0.0
  */
 jQuery(function ($) {
-
-    //Put all jquery code in here
-
+	var
+		$apiVal = $( '#crypto_currency_faucets_api' ),
+		$apiKeyRo = $( '#crypto_currency_faucets_key_row' ),
+		apiKeyHideShow = function () {
+			if ( 'faucethub.io' === $apiVal.val() ) {
+				$apiKeyRo.slideDown();
+			} else {
+				$apiKeyRo.slideUp();
+			}
+		};
+	$apiVal.change( apiKeyHideShow );
+	apiKeyHideShow();
 });

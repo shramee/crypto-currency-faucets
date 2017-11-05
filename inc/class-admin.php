@@ -55,4 +55,67 @@ class Crypto_Currency_Faucets_Admin {
 		wp_enqueue_style( $token . '-css', $url . '/assets/admin.css' );
 		wp_enqueue_script( $token . '-js', $url . '/assets/admin.js', array( 'jquery' ) );
 	}
+
+	/**
+	 * Initiates admin settings
+	 */
+	public function admin_init() {
+		register_setting( 'general', 'crypto_currency_faucets_api' );
+		register_setting( 'general', 'crypto_currency_faucets_key' );
+		register_setting( 'general', 'crypto_currency_faucets_currencies' );
+		add_settings_section(
+			'crypto_currency_faucets_section',
+			'Crypto Currency Faucets',
+			[ $this, 'crypto_currency_faucets_section' ],
+			'general'
+		);
+	}
+
+	public function crypto_currency_faucets_section() {
+		$api = get_option( 'crypto_currency_faucets_api' );
+		$key = get_option( 'crypto_currency_faucets_key' );
+		$all_currencies = [
+			'BTC',
+			'BCH',
+			'LTC',
+			'DOGE',
+			'BLK',
+			'DASH',
+			'PPC',
+		];
+		$currencies = get_option( 'crypto_currency_faucets_currencies', $all_currencies );
+		$currencies = $currencies ? $currencies : [];
+		?>
+		<table class="form-table">
+			<tr>
+				<th scope="row"><label for="crypto_currency_faucets_api">Faucets API</label></th>
+				<td>
+					<select name="crypto_currency_faucets_api" id="crypto_currency_faucets_api">
+						<option value="faucetlist.me" <?php selected( $api, 'faucetlist.me' ) ?>>faucetlist.me</option>
+						<option value="faucethub.io" <?php selected( $api, 'faucethub.io' ) ?>>faucethub.io</option>
+					</select>
+				</td>
+			</tr>
+			<tr id="crypto_currency_faucets_key_row" style="display:none;">
+				<th scope="row"><label for="crypto_currency_faucets_key">Faucets API Key</label></th>
+				<td><input name="crypto_currency_faucets_key" type="text" id="crypto_currency_faucets_key" value="<?php echo $key ?>" class="regular-text"></td>
+			</tr>
+			<tr>
+				<th scope="row"><label>Currencies</label></th>
+				<td>
+					<?php
+					foreach ( $all_currencies as $cur ) {
+						?>
+						<label>
+							<input name="crypto_currency_faucets_currencies[]" type="checkbox" value="<?php echo $cur ?>"  <?php checked( in_array( $cur, $currencies ) ) ?>>
+							<?php echo $cur ?>
+						</label><br>
+						<?php
+					}
+					?>
+				</td>
+			</tr>
+		</table>
+		<?php
+	}
 }
