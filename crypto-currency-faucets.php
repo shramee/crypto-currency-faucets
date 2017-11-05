@@ -98,7 +98,8 @@ class Crypto_Currency_Faucets{
 		$this->public = Crypto_Currency_Faucets_Public::instance();
 
 		//Enqueue front end JS and CSS
-		add_action( 'wp_enqueue_scripts',	array( $this->public, 'enqueue' ) );
+		add_action( 'wp_enqueue_scripts', 	array( $this->public, 'enqueue' ) );
+		add_shortcode( 'crypto-currency-faucets', 	array( $this->public, 'shortcode' ) );
 
 	}
 }
