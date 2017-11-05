@@ -1,7 +1,7 @@
 /**
  * Plugin front end scripts
  *
- * @package My_Plugin
+ * @package Crypto_Currency_Faucets
  * @version 1.0.0
  */
 jQuery(function ($) {

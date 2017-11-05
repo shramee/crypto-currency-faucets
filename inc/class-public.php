@@ -1,11 +1,11 @@
 <?php
 
 /**
- * My Plugin public class
+ * Crypto Currency Faucets public class
  */
-class My_Plugin_Public{
+class Crypto_Currency_Faucets_Public{
 
-	/** @var My_Plugin_Public Instance */
+	/** @var Crypto_Currency_Faucets_Public Instance */
 	private static $_instance = null;
 
 	/* @var string $token Plugin token */
@@ -21,8 +21,8 @@ class My_Plugin_Public{
 	public $version;
 
 	/**
-	 * My Plugin public class instance
-	 * @return My_Plugin_Public instance
+	 * Crypto Currency Faucets public class instance
+	 * @return Crypto_Currency_Faucets_Public instance
 	 */
 	public static function instance() {
 		if ( null == self::$_instance ) {
@@ -37,10 +37,10 @@ class My_Plugin_Public{
 	 * @since   1.0.0
 	 */
 	private function __construct() {
-		$this->token   =   My_Plugin::$token;
-		$this->url     =   My_Plugin::$url;
-		$this->path    =   My_Plugin::$path;
-		$this->version =   My_Plugin::$version;
+		$this->token   =   Crypto_Currency_Faucets::$token;
+		$this->url     =   Crypto_Currency_Faucets::$url;
+		$this->path    =   Crypto_Currency_Faucets::$path;
+		$this->version =   Crypto_Currency_Faucets::$version;
 	}
 
 	/**
