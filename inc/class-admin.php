@@ -60,7 +60,7 @@ class Crypto_Currency_Faucets_Admin {
 
 	public function admin_menu() {
 		add_options_page(
-			'Crypto Currency Faucets',
+			'Crypto Currency',
 			'Crypto Currency Faucets',
 			'manage_options',
 			'crypto_currency_faucets',
