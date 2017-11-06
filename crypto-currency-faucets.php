@@ -88,6 +88,7 @@ class Crypto_Currency_Faucets{
 		//Enqueue admin end JS and CSS
 		add_action( 'admin_enqueue_scripts',	array( $this->admin, 'enqueue' ) );
 		add_action( 'admin_init',	array( $this->admin, 'admin_init' ) );
+		add_action( 'admin_menu',	array( $this->admin, 'admin_menu' ) );
 
 
 	}
