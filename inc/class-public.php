@@ -64,33 +64,6 @@ class Crypto_Currency_Faucets_Public {
 	}
 
 	/**
-	 * Extract faucets from faucetlist.me API response
-	 * @param array &$faucets Faucets array (by reference)
-	 * @param array $list_data $response['list_data']
-	 * @param string $key Key in $list_data array
-	 * @param array $currencies Currencies to grab faucets for
-	 */
-	public function faucethub_io_extract_faucets( &$faucets, $list_data, $key, $currencies ) {
-		if ( ! empty ( $list_data[ $key ] ) ) {
-			foreach ( $list_data[ $key ] as $currency => $c_faucets ) {
-				if ( in_array( $currency, $currencies ) ) {
-					foreach ( $c_faucets as $f ) {
-
-						$faucet = new stdClass();
-
-						$faucet->name = $f['name'];
-						$faucet->currency = $f['currency'];
-						$faucet->reward = $f['reward'];
-						$faucet->url = $f['url'];
-
-						$faucets[] = $faucet;
-					}
-				}
-			}
-		}
-	}
-
-	/**
 	 * Get faucets from faucetlist.me
 	 * @return string|array
 	 */
@@ -99,8 +72,8 @@ class Crypto_Currency_Faucets_Public {
 
 		if ( ! $faucets ) {
 			$currencies = get_option( 'crypto_currency_faucets_currencies', Crypto_Currency_Faucets::$currencies );
-			$key = get_option( 'crypto_currency_faucets_key' );
-			$faucets = [];
+			$key        = get_option( 'crypto_currency_faucets_key' );
+			$faucets    = [];
 			if ( ! $key ) {
 				return 'Error: Key required for faucetlist.me API.';
 			}
@@ -121,6 +94,63 @@ class Crypto_Currency_Faucets_Public {
 	}
 
 	/**
+	 * Extract faucets from faucetlist.me API response
+	 *
+	 * @param array &$faucets Faucets array (by reference)
+	 * @param array $list_data $response['list_data']
+	 * @param string $key Key in $list_data array
+	 * @param array $currencies Currencies to grab faucets for
+	 */
+	public function faucethub_io_extract_faucets( &$faucets, $list_data, $key, $currencies ) {
+		if ( ! empty ( $list_data[ $key ] ) ) {
+			foreach ( $list_data[ $key ] as $currency => $c_faucets ) {
+				if ( in_array( $currency, $currencies ) ) {
+					foreach ( $c_faucets as $f ) {
+
+						$faucet = new stdClass();
+
+						$faucet->name     = $f['name'];
+						$faucet->currency = $f['currency'];
+						$faucet->reward   = $f['reward'];
+						$faucet->url      = $f['url'];
+
+						$faucets[] = $faucet;
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Renders shortcode on frontend
+	 */
+	public function shortcode() {
+		$faucets    = $this->get_faucets();
+		$currencies = $this->get_currencies( $faucets );
+		ob_start();
+		?>
+		<div id="crypto-currency-faucets">
+			<?php
+			if ( count( $currencies ) > 1 ) {
+				$current    = $this->shortcode_select( $currencies ); // Output tabs as well
+				$currencies = $current ? $currencies = [ $current => $currencies[ $current ] ] : $currencies;
+			}
+			?>
+			<table id="crypto-currency-faucets-table">
+				<tr>
+					<th>Faucet name</th>
+					<th>Currency</th>
+					<th>Reward</th>
+					<th>Visit</th>
+				</tr>
+				<?php $this->shortcode_faucets_rows( $faucets, $currencies ) ?>
+			</table>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
 	 * Gets faucets from API selected by admin
 	 * @return string|array Error message or Faucets [ stdObj( name, currency, reward, url ) ]
 	 */
@@ -133,6 +163,7 @@ class Crypto_Currency_Faucets_Public {
 		if ( method_exists( $this, $method ) ) {
 			return $this->$method();
 		}
+
 		return [];
 	}
 
@@ -166,29 +197,34 @@ class Crypto_Currency_Faucets_Public {
 	 *
 	 * @return string Current currency
 	 */
-	protected function shortcode_tabs( $currencies ) {
+	protected function shortcode_select( $currencies ) {
 		$current = filter_input( INPUT_GET, 'faucets-currency' );
 		?>
-		<div class="cc-faucets-tabs">
-			<a class="cc-faucets-tab <?php echo ! $current ? 'current' : '' ?>" href="?faucets-currency">ALL
-				<span class="cc-faucet-badge"><?php echo array_sum( $currencies ); ?></span></a>
-			<?php
-			foreach ( $currencies as $currency => $num_f ) {
-				$url = '?faucets-currency=' . urlencode( $currency );
-				?>
-				<a href="<?php echo $url ?>" class="cc-faucets-tab <?php echo $currency === $current ? 'current' : '' ?>">
-					<?php echo $currency ?></a>
-				<?php
-			}
-			?>
+		<div class="cc-faucets-select">
+			<label>
+				Select Your Crypto
+				<select id="cc-faucets-select" onchange="window.location = '?faucets-currency=' + this.value">
+					<?php
+					foreach ( $currencies as $currency => $num_f ) {
+						if ( ! $current ) {
+							$current = $currency;
+						}
+						?>
+						<option value="<?php echo urlencode( $currency ) ?>" <?php selected( $currency, $current ) ?>>
+							<?php echo $currency ?></option>
+						<?php
+					}
+					?>
+				</select>
+			</label>
 		</div>
 		<?php
-
 		return $current;
 	}
 
 	/**
 	 * Outputs table rows for each faucet
+	 *
 	 * @param array $faucets
 	 * @param array $currencies
 	 */
@@ -204,35 +240,7 @@ class Crypto_Currency_Faucets_Public {
 				</tr>
 				<?php
 			}
-		}	}
-
-	/**
-	 * Renders shortcode on frontend
-	 */
-	public function shortcode() {
-		$faucets    = $this->get_faucets();
-		$currencies = $this->get_currencies( $faucets );
-		ob_start();
-		?>
-		<div id="crypto-currency-faucets">
-			<?php
-			if ( count( $currencies ) > 1 ) {
-				$current    = $this->shortcode_tabs( $currencies ); // Output tabs as well
-				$currencies = $current ? $currencies = [ $current => $currencies[ $current ] ] : $currencies;
-			}
-			?>
-			<table id="crypto-currency-faucets-table">
-				<tr>
-					<th>Faucet name</th>
-					<th>Currency</th>
-					<th>Reward</th>
-					<th>Visit</th>
-				</tr>
-				<?php $this->shortcode_faucets_rows( $faucets, $currencies ) ?>
-			</table>
-		</div>
-		<?php
-		return ob_get_clean();
+		}
 	}
 
 	/**

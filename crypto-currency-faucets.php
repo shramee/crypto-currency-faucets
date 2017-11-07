@@ -2,7 +2,7 @@
 /*
 Plugin Name: Crypto Currency Faucets
 Plugin URI: http://shramee.me/
-Description: Simple plugin starter for quick delivery
+Description: Displays a table showing crypto-currency faucets. Use shortcode [crypto-currency-faucets] to show faucets table on any page.
 Author: Shramee
 Version: 1.0.0
 Author URI: http://shramee.me/

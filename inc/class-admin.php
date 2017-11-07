@@ -75,6 +75,7 @@ class Crypto_Currency_Faucets_Admin {
 		?>
 		<div class="wrap">
 			<h2>Crypto Currency Faucets</h2>
+			<p>Use shortcode <code>[crypto-currency-faucets]</code> to show faucets table on any page.</p>
 			<form action="options.php" method="post">
 				<?php
 				do_settings_sections( 'crypto_currency_faucets' );
