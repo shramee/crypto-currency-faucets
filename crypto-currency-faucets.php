@@ -100,6 +100,9 @@ class Crypto_Currency_Faucets{
 		add_action( 'admin_enqueue_scripts',	array( $this->admin, 'enqueue' ) );
 		add_action( 'admin_init',	array( $this->admin, 'admin_init' ) );
 		add_action( 'admin_menu',	array( $this->admin, 'admin_menu' ) );
+		add_action( 'update_option_crypto_currency_faucets_api',	array( $this->admin, 'clear_cache' ) );
+		add_action( 'update_option_crypto_currency_faucets_key',	array( $this->admin, 'clear_cache' ) );
+		add_action( 'update_option_crypto_currency_faucets_currencies',	array( $this->admin, 'clear_cache' ) );
 	}
 
 	/**

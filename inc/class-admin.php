@@ -60,8 +60,8 @@ class Crypto_Currency_Faucets_Admin {
 
 	public function admin_menu() {
 		add_options_page(
-			'Crypto Currency',
 			'Crypto Currency Faucets',
+			'Crypto Currency',
 			'manage_options',
 			'crypto_currency_faucets',
 			[ $this, 'admin_page' ]
@@ -104,16 +104,7 @@ class Crypto_Currency_Faucets_Admin {
 	public function crypto_currency_faucets_section() {
 		$api            = get_option( 'crypto_currency_faucets_api' );
 		$key            = get_option( 'crypto_currency_faucets_key' );
-		$all_currencies = [
-			'BTC',
-			'BCH',
-			'LTC',
-			'DOGE',
-			'BLK',
-			'DASH',
-			'PPC',
-		];
-		$currencies     = get_option( 'crypto_currency_faucets_currencies', $all_currencies );
+		$currencies     = get_option( 'crypto_currency_faucets_currencies', Crypto_Currency_Faucets::$currencies );
 		$currencies     = $currencies ? $currencies : [];
 		?>
 		<table class="form-table">
@@ -135,7 +126,7 @@ class Crypto_Currency_Faucets_Admin {
 				<th scope="row"><label>Currencies</label></th>
 				<td>
 					<?php
-					foreach ( $all_currencies as $cur ) {
+					foreach ( Crypto_Currency_Faucets::$currencies as $cur ) {
 						?>
 						<label>
 							<input name="crypto_currency_faucets_currencies[]" type="checkbox"
@@ -149,5 +140,16 @@ class Crypto_Currency_Faucets_Admin {
 			</tr>
 		</table>
 		<?php
+	}
+
+	/**
+	 * Clear cache when options are updated
+	 * @action update_option_crypto_currency_faucets_api
+	 * @action update_option_crypto_currency_faucets_key
+	 * @action update_option_crypto_currency_faucets_currencies
+	 */
+	public function clear_cache() {
+		delete_transient( 'cc-faucets-faucethub.io' );
+		delete_transient( 'cc-faucets-faucetlist.me' );
 	}
 }
