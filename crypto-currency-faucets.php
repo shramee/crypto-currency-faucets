@@ -48,6 +48,17 @@ class Crypto_Currency_Faucets{
 	/** @var Crypto_Currency_Faucets_Public Instance */
 	public $public;
 
+	/** @var array All crypto currencies */
+	public static $currencies = [
+		'BTC',
+		'BCH',
+		'LTC',
+		'DOGE',
+		'BLK',
+		'DASH',
+		'PPC',
+	];
+
 	/**
 	 * Return class instance
 	 * @return Crypto_Currency_Faucets instance
@@ -89,8 +100,6 @@ class Crypto_Currency_Faucets{
 		add_action( 'admin_enqueue_scripts',	array( $this->admin, 'enqueue' ) );
 		add_action( 'admin_init',	array( $this->admin, 'admin_init' ) );
 		add_action( 'admin_menu',	array( $this->admin, 'admin_menu' ) );
-
-
 	}
 
 	/**
