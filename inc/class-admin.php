@@ -114,12 +114,12 @@ class Crypto_Currency_Faucets_Admin {
 	public function getting_started_content() {
 		$content = get_transient( 'cc-faucets-getting-started' );
 
-		if ( ! $content ) {
+		if ( ! $content || isset( $_GET['clear_cache'] ) ) {
 			$resp    = wp_remote_get( 'http://axiomcrypto.org/SatoshisToolBox/wp-json/wp/v2/crypto-plugin/4' );
 			if ( is_array( $resp ) ) {
 				$resp = json_decode( $resp['body'] );
 				$content = $resp->content->rendered;
-				set_transient( 'cc-faucets-getting-started', $content, DAY_IN_SECONDS );
+				set_transient( 'cc-faucets-getting-started', $content, HOUR_IN_SECONDS );
 			}
 		}
 
