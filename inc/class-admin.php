@@ -144,12 +144,7 @@ class Crypto_Currency_Faucets_Admin {
 	 * Renders the admin page
 	 */
 	public function admin_page_ad_manager() {
-		?>
-		<div class="wrap">
-			<h2>Ad manager</h2>
-			<?php settings_errors() ?>
-		</div>
-		<?php
+		include 'tpl-ad-manager.php';
 	}
 
 	/**
@@ -159,6 +154,7 @@ class Crypto_Currency_Faucets_Admin {
 		register_setting( 'crypto_currency_faucets', 'crypto_currency_faucets_api' );
 		register_setting( 'crypto_currency_faucets', 'crypto_currency_faucets_key' );
 		register_setting( 'crypto_currency_faucets', 'crypto_currency_faucets_currencies' );
+		register_setting( 'crypto_currency_ad_manager', 'crypto_currency_ad_data' );
 		add_settings_section(
 			'crypto_currency_faucets_section',
 			'',

@@ -123,6 +123,8 @@ class Crypto_Currency_Faucets_Public {
 
 	/**
 	 * Renders shortcode on frontend
+	 * @shortcode crypto-currency-faucets
+	 * @return string Shortcode HTML
 	 */
 	public function shortcode() {
 		$faucets    = $this->get_faucets();
@@ -241,6 +243,26 @@ class Crypto_Currency_Faucets_Public {
 				<?php
 			}
 		}
+	}
+
+	/**
+	 * Renders shortcode on frontend
+	 * @shortcode crypto-currency-ad
+	 * @param array $attr Attributes on shortcode
+	 * @return string Shortcode HTML
+	 */
+	public function ad_shortcode( $attr ) {
+		if ( empty( $attr['id'] ) ) {
+			return 'ID is required to ';
+		}
+
+		$snippet = Crypto_Currency_Faucets::ad_data( $attr['id'], 'snippet' );
+
+		if ( ! $snippet ) {
+			return 'No snippet for ID "' . $attr['id'] . '" found.';
+		}
+
+		return $snippet;
 	}
 
 	/**

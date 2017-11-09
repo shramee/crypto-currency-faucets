@@ -1,0 +1,34 @@
+/**
+ * Plugin front end styles
+ *
+ * @package Crypto_Currency_Faucets
+ * @version 1.0.0
+ */
+
+.crypto-currency_page_crypto_currency_faucets_ad_manager {
+	.ad-man-shortcode-section {
+		input, textarea {
+			display: block;
+			width: 100%;
+			line-height: 25px;
+			padding: 4px 11px;
+			margin: 14px 0 0;
+		}
+
+		textarea {
+			height: 84px;
+		}
+
+		.col {
+			width: calc( 50% - 7px );
+			max-width: calc( 50% - 7px );
+		}
+	}
+	.ad-man-add-more {
+		display: none;
+		text-align: center;
+	}
+	.ad-man-shortcode-section[style*='display:none'] ~ .ad-man-add-more {
+		display: block;
+	}
+}

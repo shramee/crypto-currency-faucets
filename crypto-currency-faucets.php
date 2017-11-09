@@ -22,7 +22,7 @@ require 'inc/class-public.php';
  * @static string $path Plugin root dir path
  * @static string $version Plugin version
  */
-class Crypto_Currency_Faucets{
+class Crypto_Currency_Faucets {
 
 	/** @var Crypto_Currency_Faucets Instance */
 	private static $_instance = null;
@@ -58,6 +58,21 @@ class Crypto_Currency_Faucets{
 		'DASH',
 		'PPC',
 	];
+
+	/**
+	 * Get add data
+	 * @param $i
+	 * @param $name
+	 * @param string $default
+	 * @return string
+	 */
+	public static function ad_data( $i, $name, $default = '' ) {
+		$ad_data = get_option( 'crypto_currency_ad_data', [] );
+		if ( ! empty( $ad_data ) && ! empty( $ad_data[ $i ] ) && ! empty( $ad_data[ $i ][ $name ] ) ) {
+			return $ad_data[ $i ][ $name ];
+		}
+		return $default;
+	}
 
 	/**
 	 * Return class instance
@@ -115,6 +130,7 @@ class Crypto_Currency_Faucets{
 		//Enqueue front end JS and CSS
 		add_action( 'wp_enqueue_scripts', 	array( $this->public, 'enqueue' ) );
 		add_shortcode( 'crypto-currency-faucets', 	array( $this->public, 'shortcode' ) );
+		add_shortcode( 'crypto-currency-ad', 	array( $this->public, 'ad_shortcode' ) );
 
 	}
 }
