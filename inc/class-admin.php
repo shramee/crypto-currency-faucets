@@ -59,12 +59,31 @@ class Crypto_Currency_Faucets_Admin {
 	}
 
 	public function admin_menu() {
-		add_options_page(
+		add_menu_page(
 			'Crypto Currency Faucets',
 			'Crypto Currency',
 			'manage_options',
 			'crypto_currency_faucets',
-			[ $this, 'admin_page' ]
+			[ $this, 'admin_page' ],
+			'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTI1Ij48cGF0aCBmaWxsPSJibGFjayIgZD0iTTkwIDkwLjJjMCA0LjQtMy41IDgtOCA4LTQuNCAwLTgtMy42LTgtOCAwLTQuOCA0LjctMTAuMyA2LjctMTQgMS0yIDEtMyAxLjQtM3MuNSAxLjIgMS41IDMuM2MyIDMuNyA2LjcgOSA2LjcgMTMuN3pNODIgMzlINTguM2MtMyAwLTQuNC0yLTQuNC00LjhWMjEuOGgtNHYtOC40YzEuNS0uNyAyLjctMS44IDMuNC0zIDUuNi40IDEwIDMuMyAxNSAzLjMgMy40IDAgNi0yLjcgNi02IDAtMy41LTIuNi02LjItNi02LjItNC43IDAtOS40IDIuMy0xNS4yIDMtMS40LTIuMi00LjYtNC04LjMtNC00IDAtNyAyLTguNSA0LjQtNS42LS43LTEwLTMuNi0xNS0zLjYtMy40IDAtNi4yIDIuNy02LjIgNiAwIDMuNSAyLjggNi4yIDYuMiA2LjIgNC42IDAgOS40LTIuMiAxNS0zIDEgMSAyIDIgMy40IDIuOHY4LjNoLTQuN1YzNGMwIDMtLjcgNS00LjUgNUgxMC41djE4aDIxLjhzNiAxLjIgMTIuMyAxLjJDNTEgNTguMiA1NyA1NyA1NyA1N2g2LjhjMi43IDAgNy41LS4yIDcuNSAyLjZsLjQgMTAuNmMzLjggMS43IDE2LjMgMS4yIDE5LS4zbC4yLTIzLjVjMC01LTMtNy43LTktNy43eiIvPjwvc3ZnPgo='
+		);
+
+		add_submenu_page(
+			'crypto_currency_faucets',
+			'Getting Started',
+			'Getting Started',
+			'manage_options',
+			'crypto_currency_faucets_getting_started',
+			[ $this, 'admin_page_getting_started' ]
+		);
+
+		add_submenu_page(
+			'crypto_currency_faucets',
+			'Ad manager',
+			'Ad manager',
+			'manage_options',
+			'crypto_currency_faucets_ad_manager',
+			[ $this, 'admin_page_ad_manager' ]
 		);
 	}
 
@@ -75,6 +94,7 @@ class Crypto_Currency_Faucets_Admin {
 		?>
 		<div class="wrap">
 			<h2>Crypto Currency Faucets</h2>
+			<?php settings_errors() ?>
 			<p>Use shortcode <code>[crypto-currency-faucets]</code> to show faucets table on any page.</p>
 			<form action="options.php" method="post">
 				<?php
@@ -83,6 +103,51 @@ class Crypto_Currency_Faucets_Admin {
 				submit_button();
 				?>
 			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Adds front end stylesheet and js
+	 * @return array
+	 */
+	public function getting_started_content() {
+		$content = get_transient( 'cc-faucets-getting-started' );
+
+		if ( ! $content ) {
+			$resp    = wp_remote_get( 'http://axiomcrypto.org/SatoshisToolBox/wp-json/wp/v2/crypto-plugin/4' );
+			if ( is_array( $resp ) ) {
+				$resp = json_decode( $resp['body'] );
+				$content = $resp->content->rendered;
+				set_transient( 'cc-faucets-getting-started', $content, DAY_IN_SECONDS );
+			}
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Renders the admin page
+	 */
+	public function admin_page_getting_started() {
+
+		?>
+		<div class="wrap">
+			<h2>Crypto Currency Faucets</h2>
+			<?php
+			settings_errors();
+			echo $this->getting_started_content();
+
+	}
+
+	/**
+	 * Renders the admin page
+	 */
+	public function admin_page_ad_manager() {
+		?>
+		<div class="wrap">
+			<h2>Ad manager</h2>
+			<?php settings_errors() ?>
 		</div>
 		<?php
 	}
