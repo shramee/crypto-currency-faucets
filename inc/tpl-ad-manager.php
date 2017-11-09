@@ -6,7 +6,10 @@
 ?>
 <div class="wrap">
 	<h2>Ad manager</h2>
-	<?php settings_errors() ?>
+	<?php
+	settings_errors();
+	echo $this->get_remote_html( 8 );
+	?>
 	<form action="options.php" method="post">
 		<?php
 		do_settings_sections( 'crypto_currency_ad_manager' );

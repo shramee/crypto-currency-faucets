@@ -109,13 +109,14 @@ class Crypto_Currency_Faucets_Admin {
 
 	/**
 	 * Adds front end stylesheet and js
+	 * @param int $post_id Post ID to grab content from
 	 * @return array
 	 */
-	public function getting_started_content() {
-		$content = get_transient( 'cc-faucets-getting-started' );
+	public function get_remote_html( $post_id = 4 ) {
+		$content = get_transient( 'cc-faucets-remote-html-' . $post_id );
 
 		if ( ! $content || isset( $_GET['clear_cache'] ) ) {
-			$resp    = wp_remote_get( 'http://axiomcrypto.org/SatoshisToolBox/wp-json/wp/v2/crypto-plugin/4' );
+			$resp    = wp_remote_get( 'http://axiomcrypto.org/SatoshisToolBox/wp-json/wp/v2/crypto-plugin/' . $post_id );
 			if ( is_array( $resp ) ) {
 				$resp = json_decode( $resp['body'] );
 				$content = $resp->content->rendered;
@@ -136,7 +137,7 @@ class Crypto_Currency_Faucets_Admin {
 			<h2>Crypto Currency Faucets</h2>
 			<?php
 			settings_errors();
-			echo $this->getting_started_content();
+			echo $this->get_remote_html();
 
 	}
 
